@@ -17,24 +17,13 @@ export function Header() {
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
-            <a
-              href="/teachers"
+            <Link
+              to="/teachers"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Giáo viên
-            </a>
-            <a
-              href="/features"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Tính năng
-            </a>
-            <a
-              href="/pricing"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Gói học
-            </a>
+            </Link>
+        
           </nav>
         </div>
 
