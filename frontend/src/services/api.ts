@@ -1,6 +1,9 @@
 
 // Base API configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://server-6gqh.onrender.com/api"
+const API_BASE_URL =
+  import.meta.env.MODE === "production"
+    ? "https://server-6gqh.onrender.com/api"
+    : "http://localhost:8080/api"
 
 // HTTP methods type
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
