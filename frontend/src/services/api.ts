@@ -1,6 +1,6 @@
 
 // Base API configuration
-const API_BASE_URL = import.meta.env.VITE_API_URL || "https://server-1-vdam.onrender.com/api"
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://server-6gqh.onrender.com/api"
 
 // HTTP methods type
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH"
