@@ -1,6 +1,6 @@
 
 import { apiClient } from '../services/api'
-import type { BookingRequest, BookingResponse } from '../types/booking';
+import type { BookingRequest, BookingResponse, BookingTrialRequest } from '../types/booking';
 import type { ApiError } from '../services/api';
 
 export async function createBooking(bookingData: BookingRequest): Promise<BookingResponse> {
@@ -33,5 +33,18 @@ export async function confirmBookingPayment(bookingId: string): Promise<BookingR
       throw new Error('Giao dịch không hợp lệ hoặc đã xử lý')
     }
     throw error
+  }
+}
+
+export async function createTrialBooking(bookingData: BookingTrialRequest): Promise<BookingResponse> {
+  try {
+    const response = await apiClient.post<BookingResponse>('/booking/trial', bookingData);
+    return response;
+  } catch (error) {
+    const apiError = error as ApiError;
+        if (apiError.status === 400) {
+      throw new Error('Dữ liệu đặt lịch không hợp lệ: ' + (apiError.message || 'Vui lòng kiểm tra lại thông tin'));
+    } 
+    throw error;
   }
 }

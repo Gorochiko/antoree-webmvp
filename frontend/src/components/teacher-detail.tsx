@@ -13,8 +13,8 @@ import { Star, MapPin, Clock, GraduationCap, Languages, ArrowLeft } from "lucide
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { TEACHERS } from "@/mock/teacher.mock"
-
-
+import { createTrialBooking } from "@/lib/action"
+import { toast } from "sonner"
 
 interface TeacherDetailProps {
   teacherId: string
@@ -57,6 +57,33 @@ export function TeacherDetail({ teacherId }: TeacherDetailProps) {
   const basePrice = Number.parseInt(String(teacher.price).replace(/[^\d]/g, "")) // Chuyển đổi giá thành số nguyên
   const totalLessons = selectedCourse === "2-months" ? 8 : 16;
   const totalAmount = (basePrice * totalLessons);
+
+
+
+
+  const handleBookingTrial = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const bookingData = {
+        teacherId: teacher.id,
+        teacherName: teacher.name,
+        totalAmount: 0,
+        status: "trial",
+        courseType: "Học thử",
+        notes: formData.note || "",
+        email: formData.email,
+      };
+
+      await createTrialBooking(bookingData);
+      setIsTrialFormOpen(false);
+
+      toast.success("🎉 Đăng ký học thử thành công! Vui lòng kiểm tra email.");
+    } catch (error) {
+      console.error(error);
+      toast.error("❌ Có lỗi xảy ra khi đặt lịch học thử. Vui lòng thử lại.");
+    }
+  };
 
   const handleBooking = (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,22 +212,41 @@ export function TeacherDetail({ teacherId }: TeacherDetailProps) {
                     <DialogHeader>
                       <DialogTitle>Đăng ký học thử miễn phí</DialogTitle>
                     </DialogHeader>
-                    <form className="space-y-4">
+                    <form className="space-y-4" onSubmit={handleBookingTrial}>
                       <div>
                         <Label htmlFor="name">Họ và tên</Label>
-                        <Input id="name" placeholder="Nhập họ và tên của bạn" />
+                        <Input
+                          id="name"
+                          placeholder="Nhập họ và tên của bạn"
+                          value={formData.studentName}
+                          onChange={(e) => handleInputChange('studentName', e.target.value)}
+                          required
+                        />
                       </div>
                       <div>
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="Nhập email của bạn" />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="Nhập email của bạn"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          required
+                        />
                       </div>
                       <div>
                         <Label htmlFor="phone">Số điện thoại</Label>
-                        <Input id="phone" placeholder="Nhập số điện thoại" />
+                        <Input
+                          id="phone"
+                          placeholder="Nhập số điện thoại"
+                          value={formData.phone}
+                          onChange={(e) => handleInputChange('phone', e.target.value)}
+                          required
+                        />
                       </div>
                       <div>
                         <Label htmlFor="level">Trình độ hiện tại</Label>
-                        <Select>
+                        <Select onValueChange={(value) => handleInputChange('level', value)}>
                           <SelectTrigger>
                             <SelectValue placeholder="Chọn trình độ" />
                           </SelectTrigger>
@@ -214,9 +260,14 @@ export function TeacherDetail({ teacherId }: TeacherDetailProps) {
                       </div>
                       <div>
                         <Label htmlFor="note">Ghi chú (tùy chọn)</Label>
-                        <Textarea id="note" placeholder="Mục tiêu học tập, thời gian phù hợp..." />
+                        <Textarea
+                          id="note"
+                          placeholder="Mục tiêu học tập..."
+                          value={formData.note}
+                          onChange={(e) => handleInputChange('note', e.target.value)}
+                        />
                       </div>
-                      <Button type="submit" className="w-full">
+                      <Button type="button" onClick={handleBookingTrial} className="w-full">
                         Đăng ký học thử
                       </Button>
                     </form>
