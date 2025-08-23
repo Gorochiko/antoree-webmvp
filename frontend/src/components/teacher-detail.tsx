@@ -58,7 +58,8 @@ export function TeacherDetail({ teacherId }: TeacherDetailProps) {
   const totalLessons = selectedCourse === "2-months" ? 8 : 16;
   const totalAmount = (basePrice * totalLessons);
 
-  const handleBooking = () => {
+  const handleBooking = (e: React.FormEvent) => {
+    e.preventDefault();
     const bookingData = {
       teacherId: teacher.id,
       teacherName: teacher.name,
@@ -313,7 +314,7 @@ export function TeacherDetail({ teacherId }: TeacherDetailProps) {
                           </p>
                         </div>
                       )}
-                      <Button type="submit" onClick={handleBooking} className="w-full">
+                      <Button type="button" onClick={handleBooking} className="w-full">
                         Đăng ký khóa học
                       </Button>
                     </form>
